@@ -119,19 +119,19 @@ body {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D', endColorstr='#092756',GradientType=1 );
 }
 
-.login {
+.form-wrapper {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	margin: -150px 0 0 -150px;
-	width:300px;
-	height:300px;
+	width: 300px;
+	height: 300px;
 }
-.login h1 {
-    color: #fff;
+.form-wrapper h1 {
+    color: #ffffff;
     text-shadow: 0 0 10px rgba(0,0,0,0.3);
-    letter-spacing:1px;
-    text-align:center;
+    letter-spacing: 1px;
+    text-align: center;
 }
 
 input {

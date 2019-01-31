@@ -39,8 +39,20 @@ let prompt = require('./services/prompt');
         res.sendFile(__dirname + '/public/register.html');
     });
 
+    let authenticated = (req) => {
+        return false;
+    };
+
     app.get('/', (req, res) => {
-        res.sendFile(__dirname + '/public/index.html');
+        if (authenticated(req)) {
+            res.sendFile(__dirname + '/public/app.html');
+        } else {
+            res.redirect('/login');
+        }
+    });
+
+    app.get('*', (req, res) => {
+        res.redirect('/');
     });
 
     require('socketio-auth')(io, {
