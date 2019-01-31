@@ -1,14 +1,16 @@
 let passport = require('passport');
-let mongoose = require('mongoose');
+let app = require('./../app');
 let LocalStrategy = require('passport-local').Strategy;
 const consoleConfig = require('./../config/console');
 const dbConfig = require('./../config/db');
+let User = require('./models/user');
 
-const { 
-    userNotFound: loginUserNotFoundMessage, 
-    invalidPassword: loginInvalidPasswordMessage 
+app.use(passport.initialize());
+
+const {
+    userNotFound: loginUserNotFoundMessage,
+    invalidPassword: loginInvalidPasswordMessage
 } = consoleConfig.messages.errors.login;
-let User = mongoose.model('User');
 
 passport.use(new LocalStrategy({
         usernameField: dbConfig.passportUsernameField

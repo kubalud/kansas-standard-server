@@ -4,11 +4,11 @@ let mongoose = require('mongoose');
 const secretConfig = require('./../../config/secret');
 const dbConfig = require('./../../config/db');
 
-const { 
-    iterations, 
-    keylen, 
-    digest, 
-    saltByteSize 
+const {
+    iterations,
+    keylen,
+    digest,
+    saltByteSize
 } = dbConfig.documents.passwords;
 
 let userSchema = new mongoose.Schema({
@@ -25,7 +25,7 @@ let userSchema = new mongoose.Schema({
             type: String,
             required: true
         }
-    }, { 
+    }, {
         versionKey: dbConfig.documents.versionKey
     }
 );
@@ -34,8 +34,8 @@ userSchema.methods.setHash = (user, password) => {
     user.salt = crypto.randomBytes(saltByteSize).toString('hex');
     user.hash = crypto.pbkdf2Sync(
         password,
-        user.salt, 
-        iterations, 
+        user.salt,
+        iterations,
         keylen,
         digest
     ).toString('hex');
@@ -45,7 +45,7 @@ userSchema.methods.validPassword = (user, password) => {
     return user.hash === crypto.pbkdf2Sync(
         password,
         user.salt,
-        iterations, 
+        iterations,
         keylen,
         digest
     ).toString('hex');
@@ -59,4 +59,4 @@ userSchema.methods.generateJwt = (user) => {
     }, secretConfig.jwtSecret);
 };
 
-mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

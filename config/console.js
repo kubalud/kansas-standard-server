@@ -33,7 +33,7 @@ module.exports = {
                 'createDuplicateAttempt': 'Could not create a user due to a duplicate field value',
             },
             'prompt': 'Something went wrong while gathering user input',
-            'dbConnection': 'Could not connect to DB',   
+            'dbConnection': 'Could not connect to DB',
         },
         'success': {
             'dbConnected': 'Connected to DB. Awaiting queries.',

@@ -1,24 +1,22 @@
 let passport = require('passport');
-let mongoose = require('mongoose');
+let User = require('./../db/models/user');
 let errorHandler = require('./error-handler');
 const consoleConfig = require('./../config/console');
 
 const {
-    createDuplicateAttempt: createDuplicateAttemptErrorMessage 
+    createDuplicateAttempt: createDuplicateAttemptErrorMessage
 } = consoleConfig.messages.errors.crud;
 
-let User = mongoose.model('User');
-
-module.exports.register = (req, res) => {  
+module.exports.register = (req, res) => {
     let user = new User();
 
     user.email = req.body.email;
     user.setHash(user, req.body.password);
     user.save((err) => {
-        if (err.code === 11000) {
+        if (err && err.code === 11000) {
             errorHandler(
-                createDuplicateAttemptErrorMessage, 
-                err, 
+                createDuplicateAttemptErrorMessage,
+                err,
                 res.send.bind(res)
             );
         } else {
@@ -27,7 +25,7 @@ module.exports.register = (req, res) => {
         }
     });
 };
-  
+
 module.exports.login = (req, res) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {

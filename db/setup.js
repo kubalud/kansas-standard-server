@@ -1,10 +1,8 @@
 let mongoose = require('mongoose');
-let errorHandler = require('./../services/error-handler');
-let logger = require('./../services/logger');
+let errorHandler = require('../services/error-handler');
+let logger = require('../services/logger');
 const dbConfig = require('./../config/db');
-const consoleConfig = require('./../config/console');
-
-require('./models/user');
+const consoleConfig = require('../config/console');
 
 const { port, name } = dbConfig;
 
