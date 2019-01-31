@@ -18,10 +18,12 @@ let userSchema = new mongoose.Schema({
             required: true
         },
         hash: {
-            type: String
+            type: String,
+            required: true
         },
         salt: {
-            type: String
+            type: String,
+            required: true
         }
     }, {
         versionKey: dbConfig.documents.versionKey

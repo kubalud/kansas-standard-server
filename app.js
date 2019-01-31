@@ -35,12 +35,10 @@ let prompt = require('./services/prompt');
     });
 
     app.post('/login', (req, res) => {
-        console.log('Login attempt.', req.body);
         authentication.login(req, res);
     });
 
     app.post('/register', (req, res) => {
-        console.log('Register attempt.', req.body);
         authentication.register(req.body, res);
     });
 

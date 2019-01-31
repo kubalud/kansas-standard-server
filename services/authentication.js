@@ -9,15 +9,17 @@ const {
 } = consoleConfig.messages.errors.crud;
 
 module.exports.register = (data, res) => {
-    User.create(data, (err) => {
+    let user = new User(data);
+    user.setHash(user, data.password);
+    user.save((err) => {
         if (err) {
-            console.log(err);
             if (err.code === 11000) {
                 errorHandler(
                     createDuplicateAttemptErrorMessage,
                     err,
                     res.send.bind(res)
                 );
+                return;
             }
             errorHandler(
                 createFailedErrorMessage,
@@ -25,7 +27,6 @@ module.exports.register = (data, res) => {
                 res.send.bind(res)
             );
         } else {
-            console.log('succ');
             res.status(200);
             res.json({"token" : user.generateJwt(user)});
         }
