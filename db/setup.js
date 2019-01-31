@@ -1,4 +1,5 @@
-let mongoose = require('mongoose');
+module.exports = mongoose = require('mongoose');
+
 let errorHandler = require('../services/error-handler');
 let logger = require('../services/logger');
 const dbConfig = require('./../config/db');
@@ -7,6 +8,7 @@ const consoleConfig = require('../config/console');
 const { port, name } = dbConfig;
 
 mongoose.set('useCreateIndex', true);
+mongoose.model('User', require('./models/user'));
 
 mongoose.connect(
     `mongodb://localhost:${port}/${name}`,
@@ -22,5 +24,3 @@ mongoose.connect(
         }
     }
 );
-
-module.exports = mongoose;

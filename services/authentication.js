@@ -1,25 +1,31 @@
 let passport = require('passport');
-let User = require('./../db/models/user');
+let User = require('./../db/setup').model('User');
 let errorHandler = require('./error-handler');
 const consoleConfig = require('./../config/console');
 
 const {
-    createDuplicateAttempt: createDuplicateAttemptErrorMessage
+    createDuplicateAttempt: createDuplicateAttemptErrorMessage,
+    createFailed: createFailedErrorMessage
 } = consoleConfig.messages.errors.crud;
 
-module.exports.register = (req, res) => {
-    let user = new User();
-
-    user.email = req.body.email;
-    user.setHash(user, req.body.password);
-    user.save((err) => {
-        if (err && err.code === 11000) {
+module.exports.register = (data, res) => {
+    User.create(data, (err) => {
+        if (err) {
+            console.log(err);
+            if (err.code === 11000) {
+                errorHandler(
+                    createDuplicateAttemptErrorMessage,
+                    err,
+                    res.send.bind(res)
+                );
+            }
             errorHandler(
-                createDuplicateAttemptErrorMessage,
+                createFailedErrorMessage,
                 err,
                 res.send.bind(res)
             );
         } else {
+            console.log('succ');
             res.status(200);
             res.json({"token" : user.generateJwt(user)});
         }

@@ -3,7 +3,7 @@ let app = require('./../app');
 let LocalStrategy = require('passport-local').Strategy;
 const consoleConfig = require('./../config/console');
 const dbConfig = require('./../config/db');
-let User = require('./models/user');
+let User = require('./setup').model('User');
 
 app.use(passport.initialize());
 

@@ -31,6 +31,7 @@ module.exports = {
             },
             'crud': {
                 'createDuplicateAttempt': 'Could not create a user due to a duplicate field value',
+                'createFailed': 'Could not create a user'
             },
             'prompt': 'Something went wrong while gathering user input',
             'dbConnection': 'Could not connect to DB',

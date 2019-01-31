@@ -2,20 +2,35 @@
 <html lang="en" >
 	<head>
 		<meta charset="UTF-8">
-		<title>Kansas Chat App</title>
+		<title>Kansas Document App</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+		<link rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+			integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+			crossorigin="anonymous">
 		<link rel="stylesheet" href="assets/stylesheets/style.css">
 	</head>
 	<body>
-		<div class="login">
-			<h1>Register</h1>
-			<form method="post">
-				<input type="text" name="u" placeholder="Username" required="required" />
-				<input type="password" name="p" placeholder="Password" required="required" />
-				<button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
-			</form>
+		<div class="main-wrapper">
+			<div class="back-to-login-button-wrapper">
+				<form method="get" action="/login">
+					<button type="submit" class="back-to-login-button">
+						<i class="fas fa-chevron-left"></i>
+						Back to login
+					</button>
+				</form>
+			</div>
+			<div class="form-wrapper">
+				<h1>Register</h1>
+				<form method="post" action="/register">
+					<input type="text" name="email" placeholder="Email" required="required" />
+					<input type="password" name="password" placeholder="Password" required="required" />
+					<button type="submit" class="btn btn-primary btn-block btn-large">Register</button>
+				</form>
+			</div>
 		</div>
-		<script src="assets/scripts/communication.js"></script>
+
+		<script src="assets/scripts/register.js"></script>
 	</body>
 </html>

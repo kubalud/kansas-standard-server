@@ -1,6 +1,6 @@
 let crypto = require('crypto');
 let jwt = require('jsonwebtoken');
-let mongoose = require('mongoose');
+let mongoose = require('./../setup');
 const secretConfig = require('./../../config/secret');
 const dbConfig = require('./../../config/db');
 
@@ -18,12 +18,10 @@ let userSchema = new mongoose.Schema({
             required: true
         },
         hash: {
-            type: String,
-            required: true
+            type: String
         },
         salt: {
-            type: String,
-            required: true
+            type: String
         }
     }, {
         versionKey: dbConfig.documents.versionKey
@@ -59,4 +57,4 @@ userSchema.methods.generateJwt = (user) => {
     }, secretConfig.jwtSecret);
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = userSchema;

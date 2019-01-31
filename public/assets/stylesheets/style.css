@@ -119,19 +119,40 @@ body {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D', endColorstr='#092756',GradientType=1 );
 }
 
-.form-wrapper {
+.main-wrapper {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	margin: -150px 0 0 -150px;
 	width: 300px;
-	height: 300px;
+    height: 300px;
+    display: block;
 }
+
+.back-to-login-button {
+    width: 50%;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    font-family: sans-serif;
+    outline:none;
+    color: #ffffff;
+    font-size: 15px;
+    opacity: 0.7;
+    text-align: left;
+}
+
 .form-wrapper h1 {
     color: #ffffff;
     text-shadow: 0 0 10px rgba(0,0,0,0.3);
     letter-spacing: 1px;
     text-align: center;
+}
+
+.register-button-wrapper {
+    margin-top: 5px;
 }
 
 input {
