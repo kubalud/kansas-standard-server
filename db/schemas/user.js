@@ -1,6 +1,6 @@
 let crypto = require('crypto');
 let jwt = require('jsonwebtoken');
-let mongoose = require('./../setup');
+let mongoose = require('./../connection');
 const secretConfig = require('./../../config/secret');
 const dbConfig = require('./../../config/db');
 
@@ -11,7 +11,7 @@ const {
     saltByteSize
 } = dbConfig.documents.passwords;
 
-let userSchema = new mongoose.Schema({
+module.exports = userSchema = new mongoose.Schema({
         email: {
             type: String,
             unique: true,
@@ -58,5 +58,3 @@ userSchema.methods.generateJwt = (user) => {
         exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7),
     }, secretConfig.jwtSecret);
 };
-
-module.exports = userSchema;

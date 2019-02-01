@@ -5,10 +5,10 @@ let logger = require('../services/logger');
 const dbConfig = require('./../config/db');
 const consoleConfig = require('../config/console');
 
-const { port, name } = dbConfig;
+const { port, name, models } = dbConfig;
 
 mongoose.set('useCreateIndex', true);
-mongoose.model('User', require('./models/user'));
+mongoose.model(models.user, require('./schemas/user'));
 
 mongoose.connect(
     `mongodb://localhost:${port}/${name}`,

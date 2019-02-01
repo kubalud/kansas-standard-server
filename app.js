@@ -9,7 +9,6 @@ let prompt = require('./services/prompt');
     let http = require('http').Server(app);
     let io = require('socket.io')(http);
     let authentication = require('./services/authentication');
-    let User = require('./db/setup').model('User');
 
     let port = process.env.PORT || 3000;
 
@@ -60,7 +59,9 @@ let prompt = require('./services/prompt');
 
     require('socketio-auth')(io, {
         authenticate: function (socket, data, callback) {
-            User.find(
+            require('./db/connection')
+            .model(require('./config/db').models.user)
+            .find(
                 {
                     email: data.email,
                     password: data.password
