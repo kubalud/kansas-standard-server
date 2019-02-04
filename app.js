@@ -5,10 +5,12 @@ let prompt = require('./services/prompt');
 
     let express = require('express');
     let bodyParser = require('body-parser');
+    let jwt = require('jsonwebtoken');
     let app = module.exports = express();
     let http = require('http').Server(app);
     let io = require('socket.io')(http);
     let authentication = require('./services/authentication');
+    const jwtSecret = require('./config/secret').jwtSecret;
 
     let port = process.env.PORT || 3000;
 
@@ -45,16 +47,22 @@ let prompt = require('./services/prompt');
         return false;
     };
 
-    app.get('/', (req, res) => {
-        if (authenticated(req)) {
-            res.sendFile(__dirname + '/public/app.html');
+    app.get('/index', (req, res) => {
+        console.log('Verifying jwt');
+        if (req.query.jwt) {
+            if (jwt.verify(req.query.jwt, jwtSecret)) {
+                console.log('JWT ok');
+                res.sendFile(__dirname + '/public/app.html');
+            } else {
+                console.log('JWT not ok');
+            }
         } else {
             res.redirect('/login');
         }
     });
 
     app.get('*', (req, res) => {
-        res.redirect('/');
+        res.redirect('/index');
     });
 
     require('socketio-auth')(io, {
@@ -73,15 +81,17 @@ let prompt = require('./services/prompt');
                         //     err,
                         //     res.send.bind(res)
                         // );
-                        return callback(new Error("User not found"));
-                    } else {
-                        console.log(data);
+                    } else if (data && data.length) {
+                        console.log('data:', data);
                         // logger(
                         //     infoColor,
                         //     usersReadMessage,
                         //     res.send.bind(res)
                         // );
                         return callback(null, true);
+                    } else {
+                        console.log('not found');
+                        return callback(new Error("User not found"));
                     }
                 }
             );

@@ -29,7 +29,7 @@ module.exports.register = (data, res) => {
             );
         } else {
             res.status(200);
-            res.json({"token" : user.generateJwt(user)});
+            res.redirect(`/index?jwt=${user.generateJwt(user)}`);
         }
     });
 };
@@ -42,7 +42,7 @@ module.exports.login = (req, res) => {
         }
         if (user) {
             res.status(200);
-            res.json({"token" : user.generateJwt(user)});
+            res.redirect(`/index?jwt=${user.generateJwt(user)}`);
         } else {
             res.sendFile(path.resolve('public/retry-login.html'));
         }
