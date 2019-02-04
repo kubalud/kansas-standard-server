@@ -39,7 +39,8 @@ module.exports = {
             'dbUnknown': 'DB error'
         },
         'handled': {
-            'noUser': 'No such user'
+            'noUser': 'No such user',
+            'jwtExpired': 'Expired JWT'
         },
         'success': {
             'dbConnected': 'Connected to DB. Awaiting queries.',

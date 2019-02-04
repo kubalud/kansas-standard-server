@@ -57,12 +57,16 @@ let prompt = require('./services/prompt');
     app.get('/index', (req, res) => {
         if (req.query.jwt) {
             if (jwt.verify(req.query.jwt, jwtSecret)) {
-                console.log('JWT ok');
                 res.sendFile(__dirname + '/public/app.html');
             } else {
-                console.log('JWT not ok');
+                logger(
+                    consoleConfig.colors.info,
+                    consoleConfig.messages.handled.jwtExpired
+                );
+                res.redirect('/login');
             }
         } else {
+            console.log('Attempted to access index with no JWT.')
             res.redirect('/login');
         }
     });
@@ -70,8 +74,8 @@ let prompt = require('./services/prompt');
     app.post('/verification', (req, res) => {
         if (req.body) {
             let { jwt: token, email } = req.body;
-            if (token && email && jwt.verify(token, jwtSecret)) {
-                User.find({ email: req.body.email }, (err, data) => {
+            if (token && email) {
+                User.find({ email: email }, (err, data) => {
                     if (err) {
                         errorHandler(
                             consoleConfig.messages.errors.crud.findUserFailed,
@@ -80,8 +84,8 @@ let prompt = require('./services/prompt');
                         res.send('DB ERROR');
                     } else if (data && data.length) {
                         logger(
-                            consoleConfig.colors.info,
-                            consoleConfig.messages.success.usersReadMessage
+                            consoleConfig.messages.success.usersReadMessage,
+                            consoleConfig.colors.info
                         );
                         res.redirect(`/index?jwt=${token}&email=${email}`);
                     } else {
@@ -102,26 +106,27 @@ let prompt = require('./services/prompt');
         res.sendFile(__dirname + '/public/verification.html');
     });
 
-
     require('socketio-auth')(io, {
         authenticate: function (socket, data, callback) {
-            User.find({ email: data.email }, (err, data) => {
+            let { email, jwt: token } = data;
+            User.find({ email: email, jwt: token }, (err, found) => {
                 if (err) {
                     errorHandler(
                         readUsersErrorMessage,
                         err
                     );
                     return callback(new Error("DB error"));
-                } else if (data && data.length) {
-                    console.log('data:', data);
-                    // logger(
-                    //     infoColor,
-                    //     usersReadMessage,
-                    //     res.send.bind(res)
-                    // );
+                } else if (found && found.length) {
+                    logger(
+                        consoleConfig.messages.success.usersReadMessage,
+                        consoleConfig.colors.info
+                    );
                     return callback(null, true);
                 } else {
-                    console.log('not found');
+                    logger(
+                        consoleConfig.messages.handled.noUser,
+                        consoleConfig.colors.info
+                    );
                     return callback(new Error("User not found"));
                 }
             });
