@@ -29,7 +29,7 @@ module.exports.register = (data, res) => {
             );
         } else {
             res.status(200);
-            res.redirect(`/index?jwt=${user.generateJwt(user)}`);
+            res.redirect(`/index?jwt=${user.generateJwt(user)}&email=${user.email}`);
         }
     });
 };
@@ -42,7 +42,7 @@ module.exports.login = (req, res) => {
         }
         if (user) {
             res.status(200);
-            res.redirect(`/index?jwt=${user.generateJwt(user)}`);
+            res.redirect(`/index?jwt=${user.generateJwt(user)}&email=${user.email}`);
         } else {
             res.sendFile(path.resolve('public/retry-login.html'));
         }

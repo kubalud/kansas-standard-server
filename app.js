@@ -11,6 +11,13 @@ let prompt = require('./services/prompt');
     let io = require('socket.io')(http);
     let authentication = require('./services/authentication');
     const jwtSecret = require('./config/secret').jwtSecret;
+    const consoleConfig = require('./config/console');
+
+    const errorHandler = require('./services/error-handler');
+    const logger = require('./services/logger');
+
+
+    let User = require('./db/connection').model(require('./config/db').models.user);
 
     let port = process.env.PORT || 3000;
 
@@ -47,12 +54,7 @@ let prompt = require('./services/prompt');
         res.sendFile(__dirname + '/public/login.html');
     });
 
-    let authenticated = (req) => {
-        return false;
-    };
-
     app.get('/index', (req, res) => {
-        console.log('Verifying jwt');
         if (req.query.jwt) {
             if (jwt.verify(req.query.jwt, jwtSecret)) {
                 console.log('JWT ok');
@@ -65,40 +67,64 @@ let prompt = require('./services/prompt');
         }
     });
 
-    app.get('*', (req, res) => {
-        res.redirect('/index');
+    app.post('/verification', (req, res) => {
+        if (req.body) {
+            let { jwt: token, email } = req.body;
+            if (token && email && jwt.verify(token, jwtSecret)) {
+                User.find({ email: req.body.email }, (err, data) => {
+                    if (err) {
+                        errorHandler(
+                            consoleConfig.messages.errors.crud.findUserFailed,
+                            err
+                        );
+                        res.send('DB ERROR');
+                    } else if (data && data.length) {
+                        logger(
+                            consoleConfig.colors.info,
+                            consoleConfig.messages.success.usersReadMessage
+                        );
+                        res.redirect(`/index?jwt=${token}&email=${email}`);
+                    } else {
+                        errorHandler(
+                            consoleConfig.messages.handled.noUser,
+                            err
+                        );
+                        res.redirect('/login');
+                    }
+                });
+            }
+        } else {
+            res.redirect('/login');
+        }
     });
+
+    app.get('*', (req, res) => {
+        res.sendFile(__dirname + '/public/verification.html');
+    });
+
 
     require('socketio-auth')(io, {
         authenticate: function (socket, data, callback) {
-            require('./db/connection')
-            .model(require('./config/db').models.user)
-            .find(
-                {
-                    email: data.email,
-                    password: data.password
-                },
-                (err, data) => {
-                    if (err) {
-                        // errorHandler(
-                        //     readUsersErrorMessage,
-                        //     err,
-                        //     res.send.bind(res)
-                        // );
-                    } else if (data && data.length) {
-                        console.log('data:', data);
-                        // logger(
-                        //     infoColor,
-                        //     usersReadMessage,
-                        //     res.send.bind(res)
-                        // );
-                        return callback(null, true);
-                    } else {
-                        console.log('not found');
-                        return callback(new Error("User not found"));
-                    }
+            User.find({ email: data.email }, (err, data) => {
+                if (err) {
+                    errorHandler(
+                        readUsersErrorMessage,
+                        err
+                    );
+                    return callback(new Error("DB error"));
+                } else if (data && data.length) {
+                    console.log('data:', data);
+                    // logger(
+                    //     infoColor,
+                    //     usersReadMessage,
+                    //     res.send.bind(res)
+                    // );
+                    return callback(null, true);
+                } else {
+                    console.log('not found');
+                    return callback(new Error("User not found"));
                 }
-            );
+            });
         }
     });
 
