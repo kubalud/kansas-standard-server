@@ -89,21 +89,21 @@
 
 .btn-block {
     width: 100%;
-    display:block;
+    display: block;
 }
 
 * {
-    -webkit-box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    -ms-box-sizing:border-box;
-    -o-box-sizing:border-box;
-    box-sizing:border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
     width: 100%;
-    height:100%;
-    overflow:hidden;
+    height: 100%;
+    overflow: hidden;
 }
 
 body {
@@ -129,30 +129,11 @@ body {
     display: block;
 }
 
-.back-to-login-button {
-    width: 50%;
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    font-family: sans-serif;
-    outline:none;
-    color: #ffffff;
-    font-size: 15px;
-    opacity: 0.7;
-    text-align: left;
-}
-
 .form-wrapper h1 {
     color: #ffffff;
     text-shadow: 0 0 10px rgba(0,0,0,0.3);
     letter-spacing: 1px;
     text-align: center;
-}
-
-.register-button-wrapper {
-    margin-top: 5px;
 }
 
 input {
@@ -163,7 +144,7 @@ input {
 	outline: none;
 	padding: 10px;
 	font-size: 13px;
-	color: #fff;
+	color: #ffffff;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
 	border: 1px solid rgba(0,0,0,0.3);
 	border-radius: 4px;

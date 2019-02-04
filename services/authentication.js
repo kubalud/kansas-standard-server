@@ -15,11 +15,10 @@ module.exports.register = (data, res) => {
     user.save((err) => {
         if (err) {
             if (err.code === 11000) {
-                // errorHandler(
-                //     createDuplicateAttemptErrorMessage,
-                //     err,
-                //     res.send.bind(res)
-                // );
+                errorHandler(
+                    createDuplicateAttemptErrorMessage,
+                    err
+                );
                 res.sendFile(path.resolve('public/retry-register.html'));
                 return;
             }
@@ -41,12 +40,10 @@ module.exports.login = (req, res) => {
             res.status(404).json(err);
             return;
         }
-
         if (user) {
             res.status(200);
             res.json({"token" : user.generateJwt(user)});
         } else {
-            //res.status(401).json(info);
             res.sendFile(path.resolve('public/retry-login.html'));
         }
     })(req, res);

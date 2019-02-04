@@ -3,7 +3,13 @@ let app = require('./../app');
 let LocalStrategy = require('passport-local').Strategy;
 const consoleConfig = require('./../config/console');
 const dbConfig = require('./../config/db');
-let User = require('./connection').model(dbConfig.models.user);
+
+let {
+    models,
+    passportUsernameField
+} = dbConfig;
+
+let User = require('./connection').model(models.user);
 
 app.use(passport.initialize());
 
@@ -13,9 +19,9 @@ const {
 } = consoleConfig.messages.errors.login;
 
 passport.use(new LocalStrategy({
-        usernameField: dbConfig.passportUsernameField
-    }, (email, password, done) => {
-        User.findOne({ email: email }, (err, user) => {
+        usernameField: passportUsernameField
+    }, (field, password, done) => {
+        User.findOne({ [passportUsernameField]: field }, (err, user) => {
             if (err) {
                 return done(err);
             }

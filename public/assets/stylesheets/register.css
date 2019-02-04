@@ -1,0 +1,14 @@
+.back-to-login-button {
+    width: 50%;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    font-family: sans-serif;
+    outline:none;
+    color: #ffffff;
+    font-size: 15px;
+    opacity: 0.7;
+    text-align: left;
+}

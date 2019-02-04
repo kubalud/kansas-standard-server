@@ -2,14 +2,19 @@
 <html>
   <head>
     <title>Kansas Chat App</title>
-    <link rel="stylesheet" href="assets/stylesheets/style.css">
+    <link rel="stylesheet" href="assets/stylesheets/base.css">
   </head>
   <body>
-    <ul id="messages"></ul>
-    <input id="message-box" autocomplete="off" />
-    <button>
-      Send
-    </button>
+    <div class="root-wrapper">
+      <div class="main-wrapper">
+        <h1>Chat</h1>
+        <ul id="messages"></ul>
+        <input id="message-box" autocomplete="off" />
+        <button>
+          Send
+        </button>
+      </div>
+    </div>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="assets/scripts/chat.js"></script>
   </body>

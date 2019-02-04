@@ -9,10 +9,12 @@
 			href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
 			integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
 			crossorigin="anonymous">
-		<link rel="stylesheet" href="assets/stylesheets/style.css">
+		<link rel="stylesheet" href="assets/stylesheets/base.css">
+		<link rel="stylesheet" href="assets/stylesheets/register.css">
+		<link rel="stylesheet" href="assets/stylesheets/retry.css">
 	</head>
 	<body>
-		<div class="main-wrapper">
+		<div class="root-wrapper">
 			<div class="back-to-login-button-wrapper">
 				<form method="get" action="/login">
 					<button type="submit" class="back-to-login-button">
@@ -21,8 +23,8 @@
 					</button>
 				</form>
 			</div>
-			<div class="form-wrapper">
-				<h1 style="color: #dd7777">Retry register</h1>
+			<div class="main-wrapper">
+				<h1 class="retry">Retry register</h1>
 				<form method="post" action="/register">
 					<input type="text" name="email" placeholder="Email" required="required" />
 					<input type="password" name="password" placeholder="Password" required="required" />
