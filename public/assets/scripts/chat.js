@@ -5,6 +5,11 @@ localStorage.setItem('kansas-jwt', new URL(window.location.href).searchParams.ge
 let buttonElement = document.querySelector('button');
 let inputElement = document.querySelector('input');
 let ulElement = document.querySelector('ul');
+let formElement = document.querySelector('form');
+
+formElement.addEventListener('submit', () => {
+    localStorage.removeItem('kansas-jwt');
+});
 
 buttonElement.addEventListener('click', () => {
     socket.emit('chat message', inputElement.value);

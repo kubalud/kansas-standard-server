@@ -43,6 +43,10 @@ let prompt = require('./services/prompt');
         authentication.register(req.body, res);
     });
 
+    app.post('/logout', (req, res) => {
+        res.sendFile(__dirname + '/public/login.html');
+    });
+
     let authenticated = (req) => {
         return false;
     };
