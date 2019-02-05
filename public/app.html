@@ -11,22 +11,37 @@
   </head>
   <body>
     <div class="root-wrapper">
-			<div class="logout-button-wrapper">
-        <form method="post" action="/logout">
-          <button type="submit" class="logout-button">
-            Logout
-            <i class="fas fa-sign-out-alt"></i>
+			<div class="actions-wrapper">
+        <span class="leave-room-wrapper hidden">
+          <button id="leave-room-button" class="action-button">
+            <i class="fas fa-user-times"></i>
+            Leave room
           </button>
-        </form>
+        </span>
+        <span class="logout-wrapper">
+          <form method="post" action="/logout">
+            <button type="submit" class="action-button">
+              Logout
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </form>
+        </span>
       </div>
-      <div class="main-wrapper">
-        <h1>Chat</h1>
+      <div class="main-wrapper door-wrapper">
+        <h1>Enter room</h1>
+        <input id="room" autocomplete="off" />
+        <button id="door" class="btn btn-primary btn-block btn-large">
+          Enter
+        </button>
+      </div>
+      <div class="main-wrapper room-wrapper hidden">
+        <h1 id="room-name"></h1>
         <input id="message-box" autocomplete="off" />
         <button id="send" class="btn btn-primary btn-block btn-large">
           Send
         </button>
       </div>
-      <div class="messages-wrapper">
+      <div class="messages-wrapper hidden">
         <ul id="messages"></ul>
       </div>
     </div>

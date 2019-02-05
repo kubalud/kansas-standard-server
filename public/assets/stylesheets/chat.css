@@ -1,4 +1,4 @@
-.logout-button {
+.action-button {
     width: 100%;
     background-color: Transparent;
     background-repeat: no-repeat;
@@ -14,7 +14,26 @@
     transition: opacity 0.3s ease-in-out;
 }
 
-.logout-button:hover {
+.actions-wrapper {
+    display: inline-block;
+    width: 100%;
+}
+
+.leave-room-wrapper {
+    float: left;
+    margin: 5px;
+}
+
+.logout-wrapper {
+    float: right;
+    margin: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+.action-button:hover {
     opacity: 0.5;
 }
 
@@ -28,7 +47,7 @@ li {
 
 .messages-wrapper {
     height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto;
     margin-top: 10px;
 }
 

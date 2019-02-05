@@ -171,14 +171,29 @@ let prompt = require('./services/prompt');
     });
 
     io.on('connection', (socket) => {
-        setTimeout(() => {
-            socket.leave(socket.id);
-            socket.join(socket.client.user.email);
-            socket.on('chat message', (msg) => {
-                io.to(socket.client.user.email).emit('chat message', msg);
-            });
-        }, 3000); // see https://www.npmjs.com/package/socketio-auth?fbclid=IwAR3jLq0KN6ae_vSJN1wS0phnp5bddh6LzV_Y-Iy-lBeMer6ltM9qfsgEA34#implementation-details
+        socket.on('enter room', (name) => {
+            socket.join(name);
+            socket.emit('room entered', (name));
+        });
+
+        socket.on('leave room', (name) => {
+            socket.leave(name);
+            socket.emit('room left', (name));
+        });
+
+        socket.on('send message', (roomName, msg) => {
+            if (msg) {
+                io.to(roomName).emit('message sent', msg);
+            }
+        });
     });
+
+    (function roomsNews() {
+        setTimeout(() => {
+            console.log('Active rooms: ', io.sockets.adapter.rooms);
+            roomsNews();
+        }, 10000)
+    })();
 
     http.listen(port, () => {
         logger(

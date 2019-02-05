@@ -1,8 +1,9 @@
-display room top
+styles? + usernames to the left
 
-styles?
-
-make it more functional by introducing user names instead of emails and additional field such as "room" to get people going? LETS DO THAT
-+ usernames to the left
+test security (check link below)
 
 deploy to heroku
+
+ref chat html classes and js code, unify (!?!?!?!?! NOT NEC)
+
+https://www.npmjs.com/package/socketio-auth?fbclid=IwAR3jLq0KN6ae_vSJN1wS0phnp5bddh6LzV_Y-Iy-lBeMer6ltM9qfsgEA34#implementation-details
