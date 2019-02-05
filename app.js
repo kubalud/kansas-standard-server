@@ -144,8 +144,8 @@ let prompt = require('./services/prompt');
         User.findOne({ email: email }, (err, user) => {
             socket.client.user = user;
             logger(
-                consoleConfig.messages.success.userAssociatedWithSocket(socket),
-                consoleConfig.colors.success
+                consoleConfig.messages.info.userAssociatedWithSocket(socket),
+                consoleConfig.colors.info
             );
         });
     }
@@ -170,17 +170,13 @@ let prompt = require('./services/prompt');
         disconnect: disconnect
     });
 
-    // passportSocketIo.filterSocketsByUser(io, function(user){
-    //     return user.gender === 'female';
-    // }).forEach(function(socket){
-    //     socket.emit('messsage', 'hello, woman!');
-    // });
-
-    // io.on('connection', (socket) => {
-    //     socket.on('chat message', (msg) => {
-    //         io.emit('chat message', msg);
-    //     });
-    // });
+    io.on('connection', (socket) => {
+        setTimeout(() => {
+            socket.on('chat message', (msg) => {
+                socket.emit('chat message', msg);
+            });
+        }, 3000); // see https://www.npmjs.com/package/socketio-auth?fbclid=IwAR3jLq0KN6ae_vSJN1wS0phnp5bddh6LzV_Y-Iy-lBeMer6ltM9qfsgEA34#implementation-details
+    });
 
     http.listen(port, () => {
         logger(

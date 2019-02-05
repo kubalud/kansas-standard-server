@@ -38,12 +38,12 @@ module.exports = {
             serverListening: (port) => `Listening on http://localhost${port}.`,
             socketWithUserDisconnected: (socket) => `Socket ${socket.id} associated with user ${socket.client.user.email} has disconected.`,
             socketDisconnected: (socket) => `Socket with no user associated (probably due to server-side disconnect) ${socket.id} has disconected.`,
+            userAssociatedWithSocket: (socket) => `Socket ${socket.id} has been associated with user ${socket.client.user.email}.`,
             dbConnected: 'Connected to DB. Awaiting queries.'
         },
         success: {
             userAutoConnected: (user) => `User ${user.email} has been verified automatically via jwt/email.`,
             userAuthenticated: (user) => `User ${user.email} has created an authenticated websocket connection.`,
-            userAssociatedWithSocket: (socket) => `Socket ${socket.id} has been associated with user ${socket.client.user.email}.`,
             userCreatedAndLoggedIn: (user) => `User ${user.email} has just been created and logged in.`,
             userLoggedIn: (user) => `User ${user.email} has just logged in.`
         },
