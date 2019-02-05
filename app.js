@@ -60,13 +60,16 @@ let prompt = require('./services/prompt');
                 res.sendFile(__dirname + '/public/app.html');
             } else {
                 logger(
-                    consoleConfig.colors.info,
-                    consoleConfig.messages.handled.jwtExpired
+                    consoleConfig.messages.failure.jwtExpired,
+                    consoleConfig.colors.warning
                 );
                 res.redirect('/login');
             }
         } else {
-            console.log('Attempted to access index with no JWT.')
+            logger(
+                consoleConfig.messages.failure.noJWTIndexAccessAttempt,
+                consoleConfig.colors.warning
+            );
             res.redirect('/login');
         }
     });
@@ -90,7 +93,7 @@ let prompt = require('./services/prompt');
                         res.redirect(`/index?jwt=${token}&email=${email}`);
                     } else {
                         errorHandler(
-                            consoleConfig.messages.handled.noUser,
+                            consoleConfig.messages.failure.noUser,
                             err
                         );
                         res.redirect('/login');
@@ -124,7 +127,7 @@ let prompt = require('./services/prompt');
                     return callback(null, true);
                 } else {
                     logger(
-                        consoleConfig.messages.handled.noUser,
+                        consoleConfig.messages.failure.noUser,
                         consoleConfig.colors.info
                     );
                     return callback(new Error("User not found"));
@@ -140,6 +143,9 @@ let prompt = require('./services/prompt');
     // });
 
     http.listen(port, () => {
-        console.log(`Listening on http://localhost${port}.`);
+        logger(
+            `Listening on http://localhost${port}.`,
+            consoleConfig.colors.info
+        );
     });
 })();

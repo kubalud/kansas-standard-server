@@ -1,7 +1,1 @@
-remove async from error / logger
-
-add more to config.messages.handled & rename key
-
-replace console.logs with prepared services
-
-fix colors on each (add color to 'handled')
+Add same user stuff

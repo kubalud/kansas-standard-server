@@ -9,11 +9,4 @@ module.exports = (predefinedMessage, internalError, next) => {
     console.log(errorColor, `${predefinedMessage}:`);
     console.log(errorColor, internalError);
     fs.appendFileSync(logPath, `${new Date()}: ${predefinedMessage}\n`);
-    if (next) {
-        next({
-            type: 'error',
-            message: predefinedMessage,
-            errorObj: internalError
-        });
-    }
 }

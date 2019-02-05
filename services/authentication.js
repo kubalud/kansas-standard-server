@@ -15,18 +15,16 @@ module.exports.register = (data, res) => {
     user.save((err) => {
         if (err) {
             if (err.code === 11000) {
-                errorHandler(
-                    createDuplicateAttemptErrorMessage,
-                    err
-                );
+                errorHandler(createDuplicateAttemptErrorMessage, err);
                 res.sendFile(path.resolve('public/retry-register.html'));
                 return;
             }
-            errorHandler(
-                createFailedErrorMessage,
-                err,
-                res.send.bind(res)
-            );
+            errorHandler(createFailedErrorMessage, err);
+            res.send({
+                type: 'error',
+                message: createFailedErrorMessage,
+                errorObj: err
+            })
         } else {
             res.status(200);
             res.redirect(`/index?jwt=${user.generateJwt(user)}&email=${user.email}`);

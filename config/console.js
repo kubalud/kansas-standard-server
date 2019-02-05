@@ -14,6 +14,7 @@ const {
     cyan,
     red,
     green,
+    yellow,
     reset: colorReset
 } = palette;
 
@@ -21,7 +22,8 @@ module.exports = {
     'colors': {
         'info': `${cyan}%s${colorReset}`,
         'error': `${red}%s${colorReset}`,
-        'success': `${green}%s${colorReset}`
+        'success': `${green}%s${colorReset}`,
+        'warning': `${yellow}%s${colorReset}`
     },
     'messages': {
         'errors': {
@@ -38,9 +40,10 @@ module.exports = {
             'dbConnection': 'Could not connect to DB',
             'dbUnknown': 'DB error'
         },
-        'handled': {
+        'failure': {
             'noUser': 'No such user',
-            'jwtExpired': 'Expired JWT'
+            'jwtExpired': 'Expired JWT',
+            'noJWTIndexAccessAttempt': 'Attempted to access index with no JWT.'
         },
         'success': {
             'dbConnected': 'Connected to DB. Awaiting queries.',

@@ -21,8 +21,8 @@ module.exports = () => {
                     errorHandler(
                         promptErrorMessage,
                         err,
-                        reject
                     );
+                    reject();
                 } else {
                     fs.writeFileSync(
                         secretConfigFilePath,
