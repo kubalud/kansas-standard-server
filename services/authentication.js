@@ -4,22 +4,23 @@ let errorHandler = require('./error-handler');
 const consoleConfig = require('./../config/console');
 let User = require('./../db/connection').model(require('./../config/db').models.user);
 
-const {
-    createDuplicateAttempt: createDuplicateAttemptErrorMessage,
-    createFailed: createFailedErrorMessage
-} = consoleConfig.messages.errors.crud;
-
 module.exports.register = (data, res) => {
     let user = new User(data);
     user.setHash(user, data.password);
     user.save((err) => {
         if (err) {
             if (err.code === 11000) {
-                errorHandler(createDuplicateAttemptErrorMessage, err);
+                logger(
+                    consoleConfig.messages.failure.createDuplicateAttempt,
+                    consoleConfig.colors.failure
+                );
                 res.sendFile(path.resolve('public/retry-register.html'));
                 return;
             }
-            errorHandler(createFailedErrorMessage, err);
+            errorHandler(
+                consoleConfig.messages.error.unknownSaveUserError,
+                err
+            );
             res.send({
                 type: 'error',
                 message: createFailedErrorMessage,
@@ -27,6 +28,10 @@ module.exports.register = (data, res) => {
             })
         } else {
             res.status(200);
+            logger(
+                consoleConfig.messages.success.userCreatedAndLoggedIn(user),
+                consoleConfig.colors.success
+            );
             res.redirect(`/index?jwt=${user.generateJwt(user)}&email=${user.email}`);
         }
     });
@@ -42,6 +47,10 @@ module.exports.login = (req, res) => {
             res.status(200);
             res.redirect(`/index?jwt=${user.generateJwt(user)}&email=${user.email}`);
         } else {
+            logger(
+                consoleConfig.messages.success.userLoggedIn(user),
+                consoleConfig.colors.success
+            );
             res.sendFile(path.resolve('public/retry-login.html'));
         }
     })(req, res);

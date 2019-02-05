@@ -51,7 +51,7 @@ let prompt = require('./services/prompt');
     });
 
     app.post('/logout', (req, res) => {
-        res.sendFile(__dirname + '/public/login.html');
+        res.redirect('/login');
     });
 
     app.get('/index', (req, res) => {
@@ -61,13 +61,13 @@ let prompt = require('./services/prompt');
             } else {
                 logger(
                     consoleConfig.messages.failure.jwtExpired,
-                    consoleConfig.colors.warning
+                    consoleConfig.colors.failure
                 );
                 res.redirect('/login');
             }
         } else {
             logger(
-                consoleConfig.messages.failure.noJWTIndexAccessAttempt,
+                consoleConfig.messages.warning.noJWTIndexAccessAttempt,
                 consoleConfig.colors.warning
             );
             res.redirect('/login');
@@ -78,23 +78,24 @@ let prompt = require('./services/prompt');
         if (req.body) {
             let { jwt: token, email } = req.body;
             if (token && email) {
-                User.find({ email: email }, (err, data) => {
+                User.findOne({ email: email }, (err, data) => {
                     if (err) {
                         errorHandler(
-                            consoleConfig.messages.errors.crud.findUserFailed,
+                            consoleConfig.messages.errors.findUserFailed,
                             err
                         );
                         res.send('DB ERROR');
-                    } else if (data && data.length) {
+                    } else if (data) {
                         logger(
-                            consoleConfig.messages.success.usersReadMessage,
-                            consoleConfig.colors.info
+                            consoleConfig.messages.success.userAutoConnected(data),
+                            consoleConfig.colors.success
                         );
                         res.redirect(`/index?jwt=${token}&email=${email}`);
                     } else {
-                        errorHandler(
-                            consoleConfig.messages.failure.noUser,
-                            err
+                        console.log('ve', req.body);
+                        logger(
+                            consoleConfig.messages.failure.noSuchUser,
+                            consoleConfig.colors.failure
                         );
                         res.redirect('/login');
                     }
@@ -109,32 +110,71 @@ let prompt = require('./services/prompt');
         res.sendFile(__dirname + '/public/verification.html');
     });
 
-    require('socketio-auth')(io, {
-        authenticate: function (socket, data, callback) {
-            let { email, jwt: token } = data;
-            User.find({ email: email, jwt: token }, (err, found) => {
+    let authenticate = (socket, data, callback) => {
+        let { email, jwt: token } = data;
+        if (jwt.verify(token, jwtSecret)) {
+            User.findOne({ email: email }, (err, found) => {
                 if (err) {
                     errorHandler(
                         readUsersErrorMessage,
                         err
                     );
                     return callback(new Error("DB error"));
-                } else if (found && found.length) {
+                } else if (found) {
                     logger(
-                        consoleConfig.messages.success.usersReadMessage,
-                        consoleConfig.colors.info
+                        consoleConfig.messages.success.userAuthenticated(found),
+                        consoleConfig.colors.success
                     );
                     return callback(null, true);
                 } else {
+                    console.log('au');
                     logger(
-                        consoleConfig.messages.failure.noUser,
-                        consoleConfig.colors.info
+                        consoleConfig.messages.failure.noSuchUser,
+                        consoleConfig.colors.failure
                     );
                     return callback(new Error("User not found"));
                 }
             });
         }
+    }
+
+    let postAuthenticate = (socket, data) => {
+        let email = data.email;
+
+        User.findOne({ email: email }, (err, user) => {
+            socket.client.user = user;
+            logger(
+                consoleConfig.messages.success.userAssociatedWithSocket(socket),
+                consoleConfig.colors.success
+            );
+        });
+    }
+
+    let disconnect = (socket) => {
+        if (socket.client.user) {
+            logger(
+                consoleConfig.messages.info.socketWithUserDisconnected(socket),
+                consoleConfig.colors.info
+            );
+        } else {
+            logger(
+                consoleConfig.messages.info.socketDisconnected(socket),
+                consoleConfig.colors.info
+            );
+        }
+    };
+
+    require('socketio-auth')(io, {
+        authenticate: authenticate,
+        postAuthenticate: postAuthenticate,
+        disconnect: disconnect
     });
+
+    // passportSocketIo.filterSocketsByUser(io, function(user){
+    //     return user.gender === 'female';
+    // }).forEach(function(socket){
+    //     socket.emit('messsage', 'hello, woman!');
+    // });
 
     // io.on('connection', (socket) => {
     //     socket.on('chat message', (msg) => {
@@ -144,7 +184,7 @@ let prompt = require('./services/prompt');
 
     http.listen(port, () => {
         logger(
-            `Listening on http://localhost${port}.`,
+            consoleConfig.messages.info.serverListening(port),
             consoleConfig.colors.info
         );
     });

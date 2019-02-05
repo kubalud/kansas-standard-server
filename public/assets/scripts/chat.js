@@ -14,6 +14,7 @@ let formElement = document.querySelector('form');
 formElement.addEventListener('submit', () => {
     localStorage.removeItem('kansas-jwt');
     localStorage.removeItem('kansas-email');
+    socket.disconnect();
 });
 
 buttonElement.addEventListener('click', () => {

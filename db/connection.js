@@ -21,7 +21,7 @@ mongoose.connect(
             );
         } else {
             logger(
-                consoleConfig.messages.success.dbConnected,
+                consoleConfig.messages.info.dbConnected,
                 consoleConfig.colors.info
             );
         }

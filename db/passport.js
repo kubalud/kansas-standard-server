@@ -2,6 +2,7 @@ let passport = require('passport');
 let app = require('./../app');
 let LocalStrategy = require('passport-local').Strategy;
 const consoleConfig = require('./../config/console');
+const logger = require('./../services/logger');
 const dbConfig = require('./../config/db');
 
 let {
@@ -13,11 +14,6 @@ let User = require('./connection').model(models.user);
 
 app.use(passport.initialize());
 
-const {
-    userNotFound: loginUserNotFoundMessage,
-    invalidPassword: loginInvalidPasswordMessage
-} = consoleConfig.messages.errors.login;
-
 passport.use(new LocalStrategy({
         usernameField: passportUsernameField
     }, (field, password, done) => {
@@ -26,13 +22,22 @@ passport.use(new LocalStrategy({
                 return done(err);
             }
             if (!user) {
+                console.log('pp');
+                logger(
+                    consoleConfig.messages.failure.noSuchUser,
+                    consoleConfig.colors.failure
+                );
                 return done(null, false, {
-                    message: loginUserNotFoundMessage
+                    message: consoleConfig.messages.failure.noSuchUser
                 })
             }
             if (!user.validPassword(user, password)) {
+                logger(
+                    consoleConfig.messages.failure.invalidPassword,
+                    consoleConfig.colors.failure
+                );
                 return done(null, false, {
-                    message: loginInvalidPasswordMessage
+                    message: consoleConfig.messages.failure.invalidPassword
                 });
             }
             return done(null, user);

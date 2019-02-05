@@ -5,7 +5,6 @@ let errorHandler = require('./error-handler');
 const consoleConfig = require('./../config/console');
 
 const secretConfigFilePath = path.join(__dirname, '../config/secret.json');
-const { prompt: promptErrorMessage } = consoleConfig.messages.errors;
 
 const getPromptConfigValidity = () => {
     return fs.existsSync(secretConfigFilePath)
@@ -19,7 +18,7 @@ module.exports = () => {
             prompt.get(consoleConfig.prompt, (err, userInput) => {
                 if (err) {
                     errorHandler(
-                        promptErrorMessage,
+                        consoleConfig.messages.errors,
                         err,
                     );
                     reject();
