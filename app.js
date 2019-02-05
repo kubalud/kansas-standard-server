@@ -172,8 +172,10 @@ let prompt = require('./services/prompt');
 
     io.on('connection', (socket) => {
         setTimeout(() => {
+            socket.leave(socket.id);
+            socket.join(socket.client.user.email);
             socket.on('chat message', (msg) => {
-                socket.emit('chat message', msg);
+                io.to(socket.client.user.email).emit('chat message', msg);
             });
         }, 3000); // see https://www.npmjs.com/package/socketio-auth?fbclid=IwAR3jLq0KN6ae_vSJN1wS0phnp5bddh6LzV_Y-Iy-lBeMer6ltM9qfsgEA34#implementation-details
     });

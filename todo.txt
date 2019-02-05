@@ -1,1 +1,8 @@
-Add same user stuff
+display room top
+
+styles?
+
+make it more functional by introducing user names instead of emails and additional field such as "room" to get people going? LETS DO THAT
++ usernames to the left
+
+deploy to heroku
