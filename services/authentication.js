@@ -1,6 +1,7 @@
 let path = require('path');
 let passport = require('passport');
 let errorHandler = require('./error-handler');
+let logger = require('./logger');
 const consoleConfig = require('./../config/console');
 let User = require('./../db/connection').model(require('./../config/db').models.user);
 

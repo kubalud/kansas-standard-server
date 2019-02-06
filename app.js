@@ -183,7 +183,7 @@ let prompt = require('./services/prompt');
 
         socket.on('send message', (roomName, msg) => {
             if (msg) {
-                io.to(roomName).emit('message sent', msg);
+                io.to(roomName).emit('message sent', msg, socket.client.user.email);
             }
         });
     });

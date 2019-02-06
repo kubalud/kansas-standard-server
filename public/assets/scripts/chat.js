@@ -27,6 +27,12 @@ messageBox.addEventListener('keydown', (e) => {
     }
 });
 
+room.addEventListener('keydown', (e) => {
+    if (e.keyCode == 13) {
+        door.click();
+    }
+});
+
 formElement.addEventListener('submit', () => {
     localStorage.removeItem('kansas-jwt');
     localStorage.removeItem('kansas-email');
@@ -36,9 +42,15 @@ formElement.addEventListener('submit', () => {
 socket.on('connect', () => {
     socket.emit('authentication', { email: email, jwt: jwt });
     socket.on('authenticated', () => {
-        socket.on('message sent', (msg) => {
+        socket.on('message sent', (msg, user) => {
             let newLi = document.createElement("li");
-            newLi.innerHTML = msg;
+            let userSpan = document.createElement('span');
+            let msgSpan = document.createElement('span');
+            msgSpan.innerHTML = msg;
+            msgSpan.style.float = 'right';
+            userSpan.innerHTML = user;
+            newLi.appendChild(userSpan);
+            newLi.appendChild(msgSpan);
             ulElement.appendChild(newLi);
             window.scrollTo(0, document.body.scrollHeight);
         });
@@ -67,8 +79,10 @@ socket.on('connect', () => {
         });
 
         door.addEventListener('click', () => {
-            socket.emit('enter room', room.value);
-            room.value = '';
+            if (room.value) {
+                socket.emit('enter room', room.value);
+                room.value = '';
+            }
         });
 
         leaveRoomButton.addEventListener('click', () => {
