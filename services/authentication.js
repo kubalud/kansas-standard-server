@@ -41,16 +41,24 @@ module.exports.register = (data, res) => {
 module.exports.login = (req, res) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
+            logger(
+                consoleConfig.messages.error.passportError,
+                consoleConfig.colors.error
+            );
             res.status(404).json(err);
             return;
         }
         if (user) {
+            logger(
+                consoleConfig.messages.success.userLoggedIn(user),
+                consoleConfig.colors.success
+            );
             res.status(200);
             res.redirect(`/index?jwt=${user.generateJwt(user)}&email=${user.email}`);
         } else {
             logger(
-                consoleConfig.messages.success.userLoggedIn(user),
-                consoleConfig.colors.success
+                consoleConfig.messages.failure.noSuchUser,
+                consoleConfig.colors.failure
             );
             res.sendFile(path.resolve('public/retry-login.html'));
         }

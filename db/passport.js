@@ -19,12 +19,15 @@ passport.use(new LocalStrategy({
     }, (field, password, done) => {
         User.findOne({ [passportUsernameField]: field }, (err, user) => {
             if (err) {
+                logger(
+                    consoleConfig.messages.error.findUserFailed,
+                    consoleConfig.colors.error
+                );
                 return done(err);
             }
             if (!user) {
-                console.log('pp');
                 logger(
-                    consoleConfig.messages.failure.noSuchUser,
+                    consoleConfig.messages.failure.passportLocalStrategyNoSuchUser,
                     consoleConfig.colors.failure
                 );
                 return done(null, false, {

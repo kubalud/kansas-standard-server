@@ -92,10 +92,9 @@ let prompt = require('./services/prompt');
                         );
                         res.redirect(`/index?jwt=${token}&email=${email}`);
                     } else {
-                        console.log('ve', req.body);
                         logger(
-                            consoleConfig.messages.failure.noSuchUser,
-                            consoleConfig.colors.failure
+                            consoleConfig.messages.info.redirectUnverified,
+                            consoleConfig.colors.info
                         );
                         res.redirect('/login');
                     }
@@ -127,7 +126,6 @@ let prompt = require('./services/prompt');
                     );
                     return callback(null, true);
                 } else {
-                    console.log('au');
                     logger(
                         consoleConfig.messages.failure.noSuchUser,
                         consoleConfig.colors.failure
@@ -188,10 +186,14 @@ let prompt = require('./services/prompt');
         });
     });
 
-    (function roomsNews() {
+    (function roomNews() {
         setTimeout(() => {
-            console.log('Active rooms: ', io.sockets.adapter.rooms);
-            roomsNews();
+            logger(
+                consoleConfig.messages.info.activeRooms
+                    + JSON.stringify(io.sockets.adapter.rooms),
+                consoleConfig.colors.info
+            );
+            roomNews();
         }, 10000)
     })();
 
