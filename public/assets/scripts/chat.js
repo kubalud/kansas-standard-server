@@ -41,27 +41,20 @@ var socket = io.connect('http://localhost'); // TODO change on deploy
         socket.disconnect();
     });
 
+    let receivedMessages = 0;
+    let messageAmount = 5000;
+
     // on connections (element listeners set after authentication)
     socket.on('connect', () => {
         socket.emit('authentication', { email: email, jwt: jwt });
         socket.on('authenticated', () => {
             socket.on('message sent', (message, senderEmail) => {
-                // create li, then sender & message spans, add styles, append ul>li>spans, scroll to last
-                chatMessageListWrapperElement.classList.remove('hidden');
-                let newMessageListItemElement = document.createElement("li");
-
-                let sendingUserEmailElement = document.createElement('span'); // TODO styling
-                sendingUserEmailElement.innerHTML = `${senderEmail}: `;
-                sendingUserEmailElement.style['opacity'] = '0.5';
-
-                let messageElement = document.createElement('span'); // TODO styling
-                messageElement.innerHTML = message;
-                messageElement.style['word-wrap'] = 'break-word';
-
-                newMessageListItemElement.appendChild(sendingUserEmailElement);
-                newMessageListItemElement.appendChild(messageElement);
-
-                chatMessageListElement.appendChild(newMessageListItemElement);
+                receivedMessages++;
+                if (receivedMessages === messageAmount) {
+                    console.timeEnd('wait time');
+                    receivedMessages = 0;
+                    chatMessageButtonElement.click();
+                }
             });
 
             socket.on('room entered', (roomName) => {
@@ -104,8 +97,10 @@ var socket = io.connect('http://localhost'); // TODO change on deploy
                 // chat message emit
                 chatMessageButtonElement.addEventListener('click', () => {
                     if (chatMessageInputElement.value) { // empty check
-                        socket.emit('send message', currentRoom, chatMessageInputElement.value);
-                        chatMessageInputElement.value = ''; // reset
+                        for (i = 0; i < messageAmount; i++) {
+                            socket.emit('send message', currentRoom, chatMessageInputElement.value);
+                        }
+                        console.time('wait time');
                     }
                 });
 
