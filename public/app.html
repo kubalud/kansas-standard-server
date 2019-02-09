@@ -10,39 +10,43 @@
 			crossorigin="anonymous">
   </head>
   <body>
-    <div id="root-wrapper">
-			<div id="actions-wrapper">
-        <span class="leave-room-wrapper hidden">
-          <button id="leave-room-button" class="action-button">
+    <div id="kc-navigation">
+			<div id="kc-navigation__toolbar">
+        <span id="kc-navigation__toolbar--left" class="hidden" data-kc-navigation__toolbar--left>
+          <button data-kc-leave-room-button>
             <i class="fas fa-user-times"></i>
             Leave room
           </button>
         </span>
-        <span class="logout-wrapper">
+        <span id="kc-navigation__toolbar--right">
           <form method="post" action="/logout">
-            <button type="submit" class="action-button">
+            <button type="submit">
               Logout
               <i class="fas fa-sign-out-alt"></i>
             </button>
           </form>
         </span>
       </div>
-      <div id="main-wrapper">
+      <div id="kc-navigation__main" data-kc-navigation_main>
         <h1>Enter room</h1>
-        <input id="room" autocomplete="off" />
-        <button id="door" class="btn btn-primary btn-block btn-large">
+        <input data-kc-room-input autocomplete="off" />
+        <button data-kc-room-entry-button class="btn btn-primary btn-block btn-large">
           Enter
         </button>
       </div>
-      <div id="room-wrapper" class="hidden">
-        <h1 id="room-name"></h1>
-        <input id="message-box" autocomplete="off" />
-        <button id="send" class="btn btn-primary btn-block btn-large">
+    </div>
+    <div id="kc-chat" data-kc-chat class="hidden">
+      <div id="kc-chat__room-name">
+        <h1 data-kc-chat__room-name--h1></h1>
+      </div>
+      <div id="kc-chat__message-list">
+        <ul data-kc-chat__message-list--ul></ul>
+      </div>
+      <div id="kc-chat__new-message" class="hidden">
+        <input data-kc-chat__new-message--input autocomplete="off" />
+        <button data-kc-chat__new-message--button class="btn btn-primary btn-block btn-large">
           Send
         </button>
-      </div>
-      <div class="messages-wrapper hidden">
-        <ul id="messages"></ul>
       </div>
     </div>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>

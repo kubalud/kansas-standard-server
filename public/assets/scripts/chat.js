@@ -1,93 +1,122 @@
-var socket = io.connect('http://localhost');
 
-let jwt = new URL(window.location.href).searchParams.get("jwt");
-let email = new URL(window.location.href).searchParams.get("email")
-
-localStorage.setItem('kansas-jwt', jwt);
-localStorage.setItem('kansas-email', email);
-
-let sendButtonElement = document.querySelector('#send');
-let room = document.querySelector('#room');
-let messageBox = document.querySelector('#message-box');
-let door = document.querySelector('#door');
-let ulElement = document.querySelector('ul');
-let formElement = document.querySelector('form');
-let roomWrapper = document.querySelector('#room-wrapper');
-let doorWrapper = document.querySelector('#main-wrapper');
-let messagesWrapper = document.querySelector('.messages-wrapper');
-let roomNameElement = document.querySelector('#room-name');
-let leaveRoomWrapper = document.querySelector('.leave-room-wrapper');
-let leaveRoomButton = document.querySelector('#leave-room-button');
-
+// variables
 let currentRoom = '';
+var socket = io.connect('http://localhost'); // TODO change on deploy
 
-messageBox.addEventListener('keydown', (e) => {
-    if (e.keyCode == 13) {
-        sendButtonElement.click();
-    }
-});
+// login persistence
+    // grab from url
+    let jwt = new URL(window.location.href).searchParams.get("jwt");
+    let email = new URL(window.location.href).searchParams.get("email");
 
-room.addEventListener('keydown', (e) => {
-    if (e.keyCode == 13) {
-        door.click();
-    }
-});
+    // save to localStorage
+    localStorage.setItem('kansas-jwt', jwt);
+    localStorage.setItem('kansas-email', email);
 
-formElement.addEventListener('submit', () => {
-    localStorage.removeItem('kansas-jwt');
-    localStorage.removeItem('kansas-email');
-    socket.disconnect();
-});
+// element hooks
+    // inside room
+    let leaveRoomButtonWrapperElement = document.querySelector('[data-kc-navigation__toolbar--left]');
+    let leaveRoomButtonElement = document.querySelector('[data-kc-leave-room-button]');
 
-socket.on('connect', () => {
-    socket.emit('authentication', { email: email, jwt: jwt });
-    socket.on('authenticated', () => {
-        socket.on('message sent', (msg, user) => {
-            let newLi = document.createElement("li");
-            let userSpan = document.createElement('span');
-            let msgSpan = document.createElement('span');
-            msgSpan.innerHTML = msg;
-            msgSpan.style.float = 'right';
-            userSpan.innerHTML = user;
-            newLi.appendChild(userSpan);
-            newLi.appendChild(msgSpan);
-            ulElement.appendChild(newLi);
-            window.scrollTo(0, document.body.scrollHeight);
-        });
+    // outside room
+    let roomInputWrapperElement = document.querySelector('[data-kc-navigation__main]');
+    let roomInputElement = document.querySelector('[data-kc-room-input]');
+    let roomEntryButtonElement = document.querySelector('[data-kc-room-entry-button]');
 
-        socket.on('room entered', (roomName) => {
-            currentRoom = roomName;
-            roomNameElement.innerHTML = `Room ${roomName}`;
-            doorWrapper.classList.add('hidden');
-            roomWrapper.classList.remove('hidden');
-            leaveRoomWrapper.classList.remove('hidden');
-            messagesWrapper.classList.remove('hidden');
-        });
+    // chat
+    let chatWrapperElement = document.querySelector('[data-kc-chat]');
+    let roomNameElement = document.querySelector('[data-kc-chat__room-name--h1]');
+    let chatMessageListElement = document.querySelector('[data-kc-chat__message-list--ul]');
+    let chatMessageInputElement = document.querySelector('[data-kc-chat__new-message--input]');
+    let chatMessageButtonElement = document.querySelector('[data-kc-chat__new-message--button]');
 
-        socket.on('room left', () => {
-            doorWrapper.classList.remove('hidden');
-            roomWrapper.classList.add('hidden');
-            leaveRoomWrapper.classList.add('hidden');
-            messagesWrapper.classList.add('hidden');
-        });
+    // logout
+    let logoutButtonElement = document.querySelector('[data-kc-logout--button]');
 
-        sendButtonElement.addEventListener('click', () => {
-            if (messageBox.value) {
-                socket.emit('send message', currentRoom, messageBox.value);
-                messageBox.value = '';
-            }
-        });
+// listeners
+    // logout
+    logoutButtonElement.addEventListener('submit', () => {
+        localStorage.removeItem('kansas-jwt');
+        localStorage.removeItem('kansas-email');
+        socket.disconnect();
+    });
 
-        door.addEventListener('click', () => {
-            if (room.value) {
-                socket.emit('enter room', room.value);
-                room.value = '';
-            }
-        });
+    // on connections (element listeners set after authentication)
+    socket.on('connect', () => {
+        socket.emit('authentication', { email: email, jwt: jwt });
+        socket.on('authenticated', () => {
+            socket.on('message sent', (message, senderEmail) => {
+                // create li, then sender & message spans, add styles, append ul>li>spans, scroll to last
+                let newMessageListItemElement = document.createElement("li");
 
-        leaveRoomButton.addEventListener('click', () => {
-            socket.emit('leave room', currentRoom);
-            room.value = '';
+                let sendingUserEmailElement = document.createElement('span');
+                sendingUserEmailElement.innerHTML = senderEmail;
+
+                let messageElement = document.createElement('span');
+                messageElement.innerHTML = message;
+                messageElement.style.float = 'right';
+
+                newMessageListItemElement.appendChild(sendingUserEmailElement);
+                newMessageListItemElement.appendChild(messageElement);
+
+                chatMessageListElement.appendChild(newLi);
+
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+
+            socket.on('room entered', (roomName) => {
+                currentRoom = roomName; // set global room variable
+
+                roomNameElement.innerHTML = `Room ${roomName}`; // set room name in chat element header
+
+                roomInputWrapperElement.classList.add('hidden'); // hide room entrance input wrapper
+
+                leaveRoomButtonWrapperElement.classList.remove('hidden'); // show room leave button
+                chatWrapperElement.classList.remove('hidden'); // show chat wrapper
+            });
+
+            socket.on('room left', () => {
+                roomInputWrapperElement.classList.remove('hidden'); // show room entrance input wrapper
+
+                leaveRoomButtonWrapperElement.classList.add('hidden'); // hide room leave button
+                chatWrapperElement.classList.add('hidden'); // hide chat wrapper
+            });
+
+            // element listeners
+                // enter button listeners on input to trigger attached buttons
+                    // chat message
+                    chatMessageInputElement.addEventListener('keydown', (e) => {
+                        if (e.keyCode == 13) { // enter event keycode
+                            chatMessageButtonElement.click();
+                        }
+                    });
+
+                    // room entrance
+                    roomInputElement.addEventListener('keydown', (e) => {
+                        if (e.keyCode == 13) { // enter event keycode
+                            roomEntryButtonElement.click();
+                        }
+                    });
+
+                // chat message emit
+                chatMessageButtonElement.addEventListener('click', () => {
+                    if (chatMessageInputElement.value) { // empty check
+                        socket.emit('send message', currentRoom, chatMessageInputElement.value);
+                        chatMessageInputElement.value = ''; // reset
+                    }
+                });
+
+                // room navigation clicks
+                    // entering
+                    roomEntryButtonElement.addEventListener('click', () => {
+                        if (roomInputElement.value) { // empty check
+                            socket.emit('enter room', roomInputElement.value);
+                            roomInputElement.value = ''; // reset
+                        }
+                    });
+
+                    // leaving
+                    leaveRoomButtonElement.addEventListener('click', () => {
+                        socket.emit('leave room', currentRoom);
+                    });
         });
     });
-});
