@@ -14,7 +14,7 @@ var socket = io.connect('http://localhost'); // TODO change on deploy
 
 // element hooks
     // inside room
-    let leaveRoomButtonWrapperElement = document.querySelector('[data-kc-navigation__toolbar--left]');
+    let leaveRoomButtonWrapperElement = document.querySelector('[data-kc-navigation__toolbar--left-span]');
     let leaveRoomButtonElement = document.querySelector('[data-kc-leave-room-button]');
 
     // outside room
@@ -48,17 +48,17 @@ var socket = io.connect('http://localhost'); // TODO change on deploy
                 // create li, then sender & message spans, add styles, append ul>li>spans, scroll to last
                 let newMessageListItemElement = document.createElement("li");
 
-                let sendingUserEmailElement = document.createElement('span');
+                let sendingUserEmailElement = document.createElement('span'); // TODO styling
                 sendingUserEmailElement.innerHTML = senderEmail;
 
-                let messageElement = document.createElement('span');
+                let messageElement = document.createElement('span'); // TODO styling
                 messageElement.innerHTML = message;
                 messageElement.style.float = 'right';
 
                 newMessageListItemElement.appendChild(sendingUserEmailElement);
                 newMessageListItemElement.appendChild(messageElement);
 
-                chatMessageListElement.appendChild(newLi);
+                chatMessageListElement.appendChild(newMessageListItemElement);
 
                 window.scrollTo(0, document.body.scrollHeight);
             });

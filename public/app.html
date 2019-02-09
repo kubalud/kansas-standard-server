@@ -12,22 +12,22 @@
   <body>
     <div id="kc-navigation">
 			<div id="kc-navigation__toolbar">
-        <span id="kc-navigation__toolbar--left" class="hidden" data-kc-navigation__toolbar--left>
+        <span id="kc-navigation__toolbar--left-span" class="hidden" data-kc-navigation__toolbar--left-span>
           <button data-kc-leave-room-button>
             <i class="fas fa-user-times"></i>
             Leave room
           </button>
         </span>
-        <span id="kc-navigation__toolbar--right">
+        <span id="kc-navigation__toolbar--right-span">
           <form method="post" action="/logout">
-            <button type="submit">
+            <button type="submit" data-kc-logout--button>
               Logout
               <i class="fas fa-sign-out-alt"></i>
             </button>
           </form>
         </span>
       </div>
-      <div id="kc-navigation__main" data-kc-navigation_main>
+      <div id="kc-navigation__main" data-kc-navigation__main>
         <h1>Enter room</h1>
         <input data-kc-room-input autocomplete="off" />
         <button data-kc-room-entry-button class="btn btn-primary btn-block btn-large">
@@ -39,14 +39,14 @@
       <div id="kc-chat__room-name">
         <h1 data-kc-chat__room-name--h1></h1>
       </div>
-      <div id="kc-chat__message-list">
-        <ul data-kc-chat__message-list--ul></ul>
-      </div>
-      <div id="kc-chat__new-message" class="hidden">
+      <div id="kc-chat__new-message"">
         <input data-kc-chat__new-message--input autocomplete="off" />
         <button data-kc-chat__new-message--button class="btn btn-primary btn-block btn-large">
           Send
         </button>
+      </div>
+      <div id="kc-chat__message-list">
+        <ul data-kc-chat__message-list--ul></ul>
       </div>
     </div>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
