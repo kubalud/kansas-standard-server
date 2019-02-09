@@ -127,7 +127,7 @@ html {
                     linear-gradient(135deg,  #670d10 0%,#092756 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D', endColorstr='#092756',GradientType=1 );
 
-        .root-wrapper {
+        #root-wrapper {
             position: absolute;
             top: 25%;
             left: 50%;
@@ -136,12 +136,16 @@ html {
             height: 300px;
             display: block;
 
-            .main-wrapper {
+            #main-wrapper {
                 h1 {
                     color: #ffffff;
                     text-shadow: 0 0 10px rgba(0,0,0,0.3);
                     letter-spacing: 1px;
                     text-align: center;
+
+                    &.retry {
+                        color: #dd7777;
+                    }
                 }
 
                 input {

@@ -14,21 +14,23 @@
 		<link rel="stylesheet" href="assets/stylesheets/retry.css">
 	</head>
 	<body>
-		<div class="root-wrapper">
-			<div class="back-to-login-button-wrapper">
+		<div id="root-wrapper">
+			<div>
 				<form method="get" action="/login">
-					<button type="submit" class="back-to-login-button">
+					<button type="submit" id="back-to-login-button">
 						<i class="fas fa-chevron-left"></i>
 						Back to login
 					</button>
 				</form>
 			</div>
-			<div class="main-wrapper">
+			<div id="main-wrapper">
 				<h1 class="retry">Retry register</h1>
 				<form method="post" action="/register">
 					<input type="text" name="email" placeholder="Email" required="required" />
 					<input type="password" name="password" placeholder="Password" required="required" />
-					<button type="submit" class="btn btn-primary btn-block btn-large">Register</button>
+					<button type="submit" class="btn btn-primary btn-block btn-large">
+						Register
+					</button>
 				</form>
 			</div>
 		</div>

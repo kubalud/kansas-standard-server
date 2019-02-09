@@ -10,7 +10,7 @@
 			crossorigin="anonymous">
   </head>
   <body>
-    <div class="root-wrapper">
+    <div id="root-wrapper">
 			<div class="actions-wrapper">
         <span class="leave-room-wrapper hidden">
           <button id="leave-room-button" class="action-button">
@@ -27,14 +27,14 @@
           </form>
         </span>
       </div>
-      <div class="main-wrapper door-wrapper">
+      <div id="main-wrapper">
         <h1>Enter room</h1>
         <input id="room" autocomplete="off" />
         <button id="door" class="btn btn-primary btn-block btn-large">
           Enter
         </button>
       </div>
-      <div class="main-wrapper room-wrapper hidden">
+      <div id="room-wrapper" class="hidden">
         <h1 id="room-name"></h1>
         <input id="message-box" autocomplete="off" />
         <button id="send" class="btn btn-primary btn-block btn-large">
