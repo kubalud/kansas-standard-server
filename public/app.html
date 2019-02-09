@@ -11,7 +11,7 @@
   </head>
   <body>
     <div id="root-wrapper">
-			<div class="actions-wrapper">
+			<div id="actions-wrapper">
         <span class="leave-room-wrapper hidden">
           <button id="leave-room-button" class="action-button">
             <i class="fas fa-user-times"></i>
@@ -40,13 +40,15 @@
         <button id="send" class="btn btn-primary btn-block btn-large">
           Send
         </button>
+      </div>
+      <div class="messages-wrapper hidden">
+        <ul id="messages"></ul>
+      </div>
+      <div id="videos-wrapper">
         <div data-kvc-remote-videos>
 
         </div>
         <video data-kvc-local-video autoplay playsinline></video>
-      </div>
-      <div class="messages-wrapper hidden">
-        <ul id="messages"></ul>
       </div>
     </div>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
