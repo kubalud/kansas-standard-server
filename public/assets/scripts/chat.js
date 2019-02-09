@@ -26,6 +26,7 @@ var socket = io.connect('http://localhost'); // TODO change on deploy
     let chatWrapperElement = document.querySelector('[data-kc-chat]');
     let roomNameElement = document.querySelector('[data-kc-chat__room-name--h1]');
     let chatMessageListElement = document.querySelector('[data-kc-chat__message-list--ul]');
+    let chatMessageListWrapperElement = document.querySelector('[data-kc-chat__message-list]');
     let chatMessageInputElement = document.querySelector('[data-kc-chat__new-message--input]');
     let chatMessageButtonElement = document.querySelector('[data-kc-chat__new-message--button]');
 
@@ -46,21 +47,21 @@ var socket = io.connect('http://localhost'); // TODO change on deploy
         socket.on('authenticated', () => {
             socket.on('message sent', (message, senderEmail) => {
                 // create li, then sender & message spans, add styles, append ul>li>spans, scroll to last
+                chatMessageListWrapperElement.classList.remove('hidden');
                 let newMessageListItemElement = document.createElement("li");
 
                 let sendingUserEmailElement = document.createElement('span'); // TODO styling
-                sendingUserEmailElement.innerHTML = senderEmail;
+                sendingUserEmailElement.innerHTML = `${senderEmail}: `;
+                sendingUserEmailElement.style['opacity'] = '0.5';
 
                 let messageElement = document.createElement('span'); // TODO styling
                 messageElement.innerHTML = message;
-                messageElement.style.float = 'right';
+                messageElement.style['word-wrap'] = 'break-word';
 
                 newMessageListItemElement.appendChild(sendingUserEmailElement);
                 newMessageListItemElement.appendChild(messageElement);
 
                 chatMessageListElement.appendChild(newMessageListItemElement);
-
-                window.scrollTo(0, document.body.scrollHeight);
             });
 
             socket.on('room entered', (roomName) => {
@@ -79,6 +80,9 @@ var socket = io.connect('http://localhost'); // TODO change on deploy
 
                 leaveRoomButtonWrapperElement.classList.add('hidden'); // hide room leave button
                 chatWrapperElement.classList.add('hidden'); // hide chat wrapper
+                chatMessageListWrapperElement.classList.add('hidden'); // hide chat message list wrapper
+
+                chatMessageListElement.innerHTML = ''; // delete chat messages
             });
 
             // element listeners
