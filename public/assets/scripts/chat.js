@@ -62,6 +62,7 @@ var socket = io.connect('http://localhost'); // TODO change on deploy
                 newMessageListItemElement.appendChild(messageElement);
 
                 chatMessageListElement.appendChild(newMessageListItemElement);
+                chatMessageListElement.scrollTo(0, chatMessageListElement.scrollHeight);
             });
 
             socket.on('room entered', (roomName) => {
