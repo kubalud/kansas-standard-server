@@ -121,7 +121,7 @@ let prompt = require('./services/prompt');
                     return callback(new Error("DB error"));
                 } else if (found) {
                     logger(
-                        consoleConfig.messages.success.userAuthenticated(found),
+                        consoleConfig.messages.success.userAuthenticated(found, socket.id),
                         consoleConfig.colors.success
                     );
                     return callback(null, true);
