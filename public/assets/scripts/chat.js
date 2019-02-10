@@ -50,11 +50,11 @@ var socket = io.connect('http://localhost'); // TODO change on deploy
                 chatMessageListWrapperElement.classList.remove('hidden');
                 let newMessageListItemElement = document.createElement("li");
 
-                let sendingUserEmailElement = document.createElement('span'); // TODO styling
+                let sendingUserEmailElement = document.createElement('span');
                 sendingUserEmailElement.innerHTML = `${senderEmail}: `;
                 sendingUserEmailElement.style['opacity'] = '0.5';
 
-                let messageElement = document.createElement('span'); // TODO styling
+                let messageElement = document.createElement('span');
                 messageElement.innerHTML = message;
                 messageElement.style['word-wrap'] = 'break-word';
 
